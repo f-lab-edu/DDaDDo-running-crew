@@ -3,6 +3,7 @@ plugins {
     id 'org.springframework.boot' version '3.0.4'
     id 'io.spring.dependency-management' version '1.1.0'
     id 'checkstyle'
+    id 'jacoco'
 }
 
 group = 'com.flab'
@@ -20,6 +21,7 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
 }
 
 compileJava.options.encoding = 'UTF-8'
@@ -35,4 +37,18 @@ tasks.withType(Checkstyle) {
 checkstyle {
     configFile = file("checkstyle/naver-checkstyle-rules.xml")
     configProperties = ["suppressionFile": "checkstyle/naver-checkstyle-suppressions.xml"]
+}
+
+jacoco {
+    toolVersion = '0.8.8'
+}
+
+jacocoTestReport {
+    executionData(fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec"))
+
+    reports {
+        html.enabled true
+        xml.enabled false
+        csv.enabled false
+    }
 }

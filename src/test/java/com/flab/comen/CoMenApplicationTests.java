@@ -1,4 +1,4 @@
-package com.f_lab.comen;
+package com.flab.comen;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -5,7 +5,7 @@ plugins {
     id 'checkstyle'
 }
 
-group = 'com.f_lab'
+group = 'com.flab'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
@@ -24,6 +24,13 @@ tasks.named('test') {
 
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
+
+tasks.withType(Checkstyle) {
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
 
 checkstyle {
     configFile = file("checkstyle/naver-checkstyle-rules.xml")

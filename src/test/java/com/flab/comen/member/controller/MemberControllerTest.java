@@ -50,7 +50,7 @@ class MemberControllerTest {
 
 	@Nested
 	@DisplayName("회원가입")
-	class joinTest {
+	class JoinTest {
 		@Test
 		@DisplayName("조건에 맞는 모든 필드를 입력받으면 회원가입이 성공한다.")
 		void when_allFieldsAreEntered_expect_joinToSuccess() throws Exception {
@@ -62,7 +62,7 @@ class MemberControllerTest {
 				)
 				.andDo(print());
 
-			response.andExpect(status().isCreated());
+			response.andExpect(status().isOk());
 		}
 
 		@ParameterizedTest

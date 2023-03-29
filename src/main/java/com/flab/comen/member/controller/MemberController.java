@@ -1,6 +1,5 @@
 package com.flab.comen.member.controller;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -8,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.flab.comen.member.dto.JoinRequest;
+import com.flab.comen.member.dto.JoinResponse;
 import com.flab.comen.member.service.MemberService;
 
 import jakarta.validation.Valid;
@@ -23,8 +23,7 @@ public class MemberController {
 	}
 
 	@PostMapping("/join")
-	public ResponseEntity<Void> join(@RequestBody @Valid JoinRequest dto) {
-		memberService.join(dto);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+	public ResponseEntity<JoinResponse> join(@RequestBody @Valid JoinRequest dto) {
+		return ResponseEntity.ok(memberService.join(dto));
 	}
 }

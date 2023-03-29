@@ -10,6 +10,10 @@ import lombok.Getter;
 
 @Getter
 public class JoinRequest {
+
+	// 회원가입 쿼리에서 tid를 반환하기 위한 필드
+	private Long tid;
+
 	@NotBlank(message = "이메일 주소를 입력해 주세요.")
 	@Email(message = "이메일 형식이 맞지 않습니다.")
 	String email;

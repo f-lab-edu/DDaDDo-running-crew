@@ -2,6 +2,7 @@ package com.flab.comen.global.exception;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -30,6 +31,13 @@ public class ApiExceptionHandler {
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException exception) {
 		log.error("IllegalArgumentException : ", exception);
+
+		return ResponseEntity.badRequest().body(exception.getMessage());
+	}
+
+	@ExceptionHandler(NoSuchElementException.class)
+	public ResponseEntity<String> handleNoSuchElementException(NoSuchElementException exception) {
+		log.error("NoSuchElementException : ", exception);
 
 		return ResponseEntity.badRequest().body(exception.getMessage());
 	}

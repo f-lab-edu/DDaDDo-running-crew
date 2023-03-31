@@ -2,14 +2,13 @@ package com.flab.comen.member.service;
 
 import static com.flab.comen.global.exception.ErrorMessage.*;
 
-import java.util.NoSuchElementException;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.flab.comen.member.domain.Member;
 import com.flab.comen.member.dto.JoinRequest;
 import com.flab.comen.member.dto.JoinResponse;
+import com.flab.comen.member.exception.MemberNotFoundException;
 import com.flab.comen.member.mapper.MemberMapper;
 
 @Service
@@ -46,7 +45,7 @@ public class MemberService {
 
 	public Member getByTid(Long tid) {
 		return memberMapper.findByTid(tid).orElseThrow(() -> {
-			throw new NoSuchElementException(MEMBER_NOT_FOUND.getMessage());
+			throw new MemberNotFoundException(MEMBER_NOT_FOUND.getMessage());
 		});
 	}
 }

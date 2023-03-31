@@ -2,13 +2,14 @@ package com.flab.comen.global.exception;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import com.flab.comen.member.exception.MemberNotFoundException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,9 +36,9 @@ public class ApiExceptionHandler {
 		return ResponseEntity.badRequest().body(exception.getMessage());
 	}
 
-	@ExceptionHandler(NoSuchElementException.class)
-	public ResponseEntity<String> handleNoSuchElementException(NoSuchElementException exception) {
-		log.error("NoSuchElementException : ", exception);
+	@ExceptionHandler(MemberNotFoundException.class)
+	public ResponseEntity<String> handleMemberNotFoundException(MemberNotFoundException exception) {
+		log.error("MemberNotFoundException : ", exception);
 
 		return ResponseEntity.badRequest().body(exception.getMessage());
 	}

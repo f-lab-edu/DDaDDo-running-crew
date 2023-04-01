@@ -5,4 +5,36 @@
 
 <mapper namespace="com.flab.comen.member.mapper.MemberMapper">
 
+    <insert id="join" parameterType="com.flab.comen.member.dto.JoinRequest">
+        INSERT INTO member(
+        email,
+        password,
+        name,
+        role,
+        created_dt,
+        updated_dt)
+        VALUES (
+        #{email},
+        #{password},
+        #{name},
+        #{role},
+        NOW(),
+        NOW())
+        <selectKey keyProperty="tid" resultType="Long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="findByEmail" parameterType="String" resultType="com.flab.comen.member.domain.Member">
+        SELECT *
+        FROM member
+        WHERE email = #{email}
+    </select>
+
+    <select id="findByTid" parameterType="Long" resultType="com.flab.comen.member.domain.Member">
+        SELECT *
+        FROM member
+        WHERE tid = #{tid}
+    </select>
+
 </mapper>

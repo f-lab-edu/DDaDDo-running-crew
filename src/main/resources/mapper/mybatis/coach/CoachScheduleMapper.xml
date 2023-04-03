@@ -4,4 +4,70 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.flab.comen.coachSchedule.mapper.CoachScheduleMapper">
+
+    <insert id="insertSchedule">
+        INSERT INTO coaching_schedule(
+            coach_id
+            , possible_dt
+            , week_number
+            , created_dt
+        )VALUES(
+            #{coachId}
+            , #{possibleDt}
+            , #{weekNumber}
+            , NOW()
+        )
+        <selectKey keyProperty="tid" resultType="Long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="selectDuplicateSchedule">
+        SELECT count(*)
+        FROM coaching_schedule
+        WHERE possible_dt BETWEEN DATE_SUB(#{possibleDt}, INTERVAL 59 MINUTE) AND #{possibleDt}
+    </select>
+
+    <update id="updateSchedule">
+        UPDATE coaching_schedule SET
+            updated_dt = #{updatedDt}
+            , updated_by = #{updatedBy}
+            <if test="coach_id != null and !coach_id.isEmpty()">
+            , coach_id = #{coachId}
+            </if>
+            <if test="menteeId != null and !menteeId.isEmpty()">
+            , mentee_id = #{menteeId}
+            </if>
+            <if test="possibleDt != null and !possibleDt.isEmpty()">
+            , possible_dt = #{possibleDt}
+            </if>
+            <if test="weekNumber != null and !weekNumber.isEmpty()">
+            , week_number = #{weekNumber}
+            </if>
+            <if test="cancelYn != null and !cancelYn.isEmpty()">
+            , cancel_yn = #{cancelYn}
+            </if>
+            <if test="feedback != null and !feedback.isEmpty()">
+            , feedback = #{feedback}
+            </if>
+            <if test="feedbackCreateDt != null and !feedbackCreateDt.isEmpty()">
+            , feedback_created_dt = #{feedbackCreateDt}
+            </if>
+        WHERE TID = #{tid}
+    </update>
+
+    <update id="updateMenteesCoachExpireDate">
+        UPDATE coaching_relationship cr
+            LEFT OUTER JOIN (
+                SELECT DISTINCT coach_id
+                FROM coaching_schedule
+                WHERE possible_dt BETWEEN ${nextMondayDate} AND DATE_ADD(${nextMondayDate}, INTERVAL 7 DAY)
+            ) coach ON coach.coach_id = cr.coach_id
+            SET cr.expired_dt = DATE_ADD(expired_dt, INTERVAL 7 DAY)
+        WHERE cr.expired_dt > NOW()
+          AND cr.active_yn = 'Y'
+          AND coach.coach_id IS NULL
+          AND cr.tid > 0;
+    </update>
+
 </mapper>

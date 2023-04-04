@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.flab.comen.member.domain.Member;
 import com.flab.comen.member.dto.JoinRequest;
+import com.flab.comen.member.exception.MemberNotFoundException;
 import com.flab.comen.member.mapper.MemberMapper;
 
 @ExtendWith(MockitoExtension.class)
@@ -46,14 +47,14 @@ class MemberServiceTest {
 		}
 
 		@Test
-		@DisplayName("등록된 회원 정보가 없다면 NoSuchElementException이 발생한다.")
+		@DisplayName("등록된 회원 정보가 없다면 MemberNotFoundException이 발생한다.")
 		void when_memberDoesNotExist_expect_throwsNoSuchElementException() {
-			Long newTid = 2L;
+			String email = "comen@comen.com";
 
-			given(memberMapper.findByTid(anyLong())).willThrow(NoSuchElementException.class);
+			given(memberMapper.findByEmail(anyString())).willThrow(MemberNotFoundException.class);
 
-			assertThrows(NoSuchElementException.class, () -> {
-				memberService.getByTid(newTid);
+			assertThrows(MemberNotFoundException.class, () -> {
+				memberService.getByEmail(email);
 			});
 		}
 	}

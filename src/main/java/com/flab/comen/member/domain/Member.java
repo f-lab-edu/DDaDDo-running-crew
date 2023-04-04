@@ -1,6 +1,6 @@
 package com.flab.comen.member.domain;
 
-import java.time.LocalDateTime;
+import com.flab.comen.global.domain.BaseTime;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class Member {
+public class Member extends BaseTime {
 
 	private Long tid;
 	private String email;
@@ -16,10 +16,6 @@ public class Member {
 	private String name;
 	private Role role;
 	private ActiveType activeType;
-
-	private LocalDateTime createdDt;
-
-	private LocalDateTime updatedDt;
 
 	public static Member of(String email, String password, String name, Role role, ActiveType activeType) {
 		Member member = new Member();

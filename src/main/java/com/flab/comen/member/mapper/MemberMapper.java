@@ -11,7 +11,5 @@ import com.flab.comen.member.dto.JoinRequest;
 public interface MemberMapper {
 	Optional<Member> findByEmail(String email);
 
-	Optional<Member> findByTid(Long tid);
-
 	void join(JoinRequest dto);
 }

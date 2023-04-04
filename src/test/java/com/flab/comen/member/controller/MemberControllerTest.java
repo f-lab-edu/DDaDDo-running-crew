@@ -1,10 +1,16 @@
 package com.flab.comen.member.controller;
 
 import static com.flab.comen.member.domain.Role.*;
+import static org.mockito.BDDMockito.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -20,18 +26,25 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.flab.comen.member.domain.ActiveType;
 import com.flab.comen.member.domain.Role;
 import com.flab.comen.member.dto.JoinRequest;
+import com.flab.comen.member.dto.JoinResponse;
 import com.flab.comen.member.service.MemberService;
 
 @WebMvcTest(MemberController.class)
 @AutoConfigureMockMvc(addFilters = false)
 @AutoConfigureMybatis
-@ExtendWith(MockitoExtension.class)
+@ExtendWith({MockitoExtension.class, RestDocumentationExtension.class})
 class MemberControllerTest {
 
 	@Autowired
@@ -48,6 +61,13 @@ class MemberControllerTest {
 	public static final String NAME = "김코멘";
 	public static final Role ROLE = MENTEE;
 
+	@BeforeEach
+	public void setUp(WebApplicationContext webApplicationContext,
+		RestDocumentationContextProvider restDocumentation) {
+		this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+			.apply(documentationConfiguration(restDocumentation)).build();
+	}
+
 	@Nested
 	@DisplayName("회원가입")
 	class JoinTest {
@@ -55,12 +75,33 @@ class MemberControllerTest {
 		@DisplayName("조건에 맞는 모든 필드를 입력받으면 회원가입이 성공한다.")
 		void when_allFieldsAreEntered_expect_joinToSuccess() throws Exception {
 			JoinRequest joinRequest = new JoinRequest(EMAIL, PASSWORD, NAME, ROLE);
+			JoinResponse joinResponse = new JoinResponse(EMAIL, NAME, ROLE, ActiveType.ACTIVE);
+
+			given(memberService.join(any())).willReturn(joinResponse);
 
 			ResultActions response = mockMvc.perform(post("/api/v1/members/join")
 					.contentType(MediaType.APPLICATION_JSON)
 					.content(objectMapper.writeValueAsBytes(joinRequest))
 				)
-				.andDo(print());
+				.andDo(print())
+				.andDo(document("member-join",
+					preprocessRequest(modifyUris()
+						.port(9090), prettyPrint()),
+					preprocessResponse(prettyPrint()),
+					requestFields(
+						fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
+						fieldWithPath("password").type(JsonFieldType.STRING)
+								.description("비밀번호(8자~16자 이하의 영문 대소문자/숫자/특수문자 조합)"),
+						fieldWithPath("name").type(JsonFieldType.STRING).description("이름"),
+						fieldWithPath("role").type(JsonFieldType.STRING).description("에프랩 내에서의 역할(COACH|MENTEE)"),
+						fieldWithPath("tid").ignored()
+					),
+					responseFields(
+						fieldWithPath("email").type(JsonFieldType.STRING).description("가입된 이메일 정보"),
+						fieldWithPath("name").type(JsonFieldType.STRING).description("가입된 이름 정보"),
+						fieldWithPath("role").type(JsonFieldType.STRING).description("가입된 역할 정보"),
+						fieldWithPath("activeType").type(JsonFieldType.STRING).description("가입된 계정 활성화 정보")
+					)));
 
 			response.andExpect(status().isOk());
 		}

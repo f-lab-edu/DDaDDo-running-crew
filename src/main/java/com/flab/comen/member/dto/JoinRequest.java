@@ -6,9 +6,13 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class JoinRequest {
 
 	// 회원가입 쿼리에서 tid를 반환하기 위한 필드
@@ -32,6 +36,7 @@ public class JoinRequest {
 		this.password = encryptPassword;
 	}
 
+	@Builder
 	public JoinRequest(String email, String password, String name, Role role) {
 		this.email = email;
 		this.password = password;

@@ -91,12 +91,7 @@ task copyDocument(type: Copy) {
 
 bootJar {
     dependsOn asciidoctor
-    copy {
-        from "${asciidoctor.outputDir}"
-        into 'BOOT-INF/classes/static/docs'
+    from ("${asciidoctor.outputDir}/html5") {
+        into 'static/docs'
     }
-}
-
-build {
-    dependsOn copyDocument
 }

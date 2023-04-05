@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Member extends BaseTime {
 
+	private Long tid;
 	private String email;
 	private String password;
 	private String name;

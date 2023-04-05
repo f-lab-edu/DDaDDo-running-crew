@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.flab.comen.member.exception.DuplicatedEmailException;
+import com.flab.comen.member.exception.NotActivatedMemberException;
 import com.flab.comen.member.exception.NotExistedMemberException;
+import com.flab.comen.member.exception.NotMatchedInformationException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,7 +24,7 @@ public class ApiExceptionHandler {
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException exception) {
-		log.error("MethodArgumentNotValidException : ", exception);
+		log.error("MethodArgumentNotValidException - {}", exception.getMessage());
 
 		Map<String, String> errors = new HashMap<>();
 		exception.getBindingResult().getAllErrors()
@@ -32,14 +34,26 @@ public class ApiExceptionHandler {
 	}
 
 	@ExceptionHandler(DuplicatedEmailException.class)
-	private ResponseEntity<ErrorResponse> handleDuplicatedEmailException(DuplicatedEmailException exception) {
-		log.error("DuplicatedEmailException : ", exception);
+	private ResponseEntity<ErrorResponse> handleDuplicatedEmailException() {
+		log.error("DuplicatedEmailException has occurred.");
 		return ErrorResponse.toResponseEntity(DUPLICATED_EMAIL);
 	}
 
 	@ExceptionHandler(NotExistedMemberException.class)
-	private ResponseEntity<ErrorResponse> handleNotExistedMemberException(NotExistedMemberException exception) {
-		log.error("NotExistedMemberException : ", exception);
+	private ResponseEntity<ErrorResponse> handleNotExistedMemberException() {
+		log.error("NotExistedMemberException  has occurred.");
 		return ErrorResponse.toResponseEntity(NOT_EXISTED_MEMBER);
+	}
+
+	@ExceptionHandler(NotMatchedInformationException.class)
+	private ResponseEntity<ErrorResponse> handleNotMatchedInformationException() {
+		log.error("NotMatchedInformationException has occurred.");
+		return ErrorResponse.toResponseEntity(NOT_MATCHED_LOGIN_INFORMATION);
+	}
+
+	@ExceptionHandler(NotActivatedMemberException.class)
+	private ResponseEntity<ErrorResponse> handleNotActivatedMemberException() {
+		log.error("NotActivatedMemberException has occurred.");
+		return ErrorResponse.toResponseEntity(NOT_ACTIVATED_MEMBER);
 	}
 }

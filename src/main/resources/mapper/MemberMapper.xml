@@ -5,7 +5,7 @@
 
 <mapper namespace="com.flab.comen.member.mapper.MemberMapper">
 
-    <insert id="join" parameterType="com.flab.comen.member.dto.JoinRequest">
+    <insert id="join" parameterType="com.flab.comen.member.dto.request.JoinRequest">
         INSERT INTO member(
                             email,
                             password,

@@ -1,14 +1,13 @@
 package com.flab.comen.member.service;
 
-import static com.flab.comen.global.exception.ErrorMessage.*;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.flab.comen.member.domain.Member;
 import com.flab.comen.member.dto.JoinRequest;
 import com.flab.comen.member.dto.JoinResponse;
-import com.flab.comen.member.exception.MemberNotFoundException;
+import com.flab.comen.member.exception.DuplicatedEmailException;
+import com.flab.comen.member.exception.NotExistedMemberException;
 import com.flab.comen.member.mapper.MemberMapper;
 
 @Service
@@ -26,7 +25,7 @@ public class MemberService {
 	public JoinResponse join(JoinRequest joinRequest) {
 
 		memberMapper.findByEmail(joinRequest.getEmail()).ifPresent(it -> {
-			throw new IllegalArgumentException(DUPLICATED_EMAIL.getMessage());
+			throw new DuplicatedEmailException();
 		});
 
 		String encryptPassword = passwordEncoder.encode(joinRequest.getPassword());
@@ -45,7 +44,7 @@ public class MemberService {
 
 	public Member getByEmail(String email) {
 		return memberMapper.findByEmail(email).orElseThrow(() -> {
-			throw new MemberNotFoundException(MEMBER_NOT_FOUND.getMessage());
+			throw new NotExistedMemberException();
 		});
 	}
 }

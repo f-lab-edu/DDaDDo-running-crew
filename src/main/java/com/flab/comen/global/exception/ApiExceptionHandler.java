@@ -1,5 +1,7 @@
 package com.flab.comen.global.exception;
 
+import static com.flab.comen.global.exception.ErrorMessage.*;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,7 +11,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.flab.comen.member.exception.MemberNotFoundException;
+import com.flab.comen.member.exception.DuplicatedEmailException;
+import com.flab.comen.member.exception.NotExistedMemberException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,27 +22,24 @@ public class ApiExceptionHandler {
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException exception) {
-		Map<String, String> errors = new HashMap<>();
+		log.error("MethodArgumentNotValidException : ", exception);
 
+		Map<String, String> errors = new HashMap<>();
 		exception.getBindingResult().getAllErrors()
 			.forEach(e -> errors.put(((FieldError)e).getField(), e.getDefaultMessage()));
-
-		log.error("MethodArgumentNotValidException : ", exception);
 
 		return ResponseEntity.badRequest().body(errors);
 	}
 
-	@ExceptionHandler(IllegalArgumentException.class)
-	public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException exception) {
-		log.error("IllegalArgumentException : ", exception);
-
-		return ResponseEntity.badRequest().body(exception.getMessage());
+	@ExceptionHandler(DuplicatedEmailException.class)
+	private ResponseEntity<ErrorResponse> handleDuplicatedEmailException(DuplicatedEmailException exception) {
+		log.error("DuplicatedEmailException : ", exception);
+		return ErrorResponse.toResponseEntity(DUPLICATED_EMAIL);
 	}
 
-	@ExceptionHandler(MemberNotFoundException.class)
-	public ResponseEntity<String> handleMemberNotFoundException(MemberNotFoundException exception) {
-		log.error("MemberNotFoundException : ", exception);
-
-		return ResponseEntity.badRequest().body(exception.getMessage());
+	@ExceptionHandler(NotExistedMemberException.class)
+	private ResponseEntity<ErrorResponse> handleNotExistedMemberException(NotExistedMemberException exception) {
+		log.error("NotExistedMemberException : ", exception);
+		return ErrorResponse.toResponseEntity(NOT_EXISTED_MEMBER);
 	}
 }

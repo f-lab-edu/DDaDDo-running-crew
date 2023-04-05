@@ -16,7 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.flab.comen.member.domain.Member;
-import com.flab.comen.member.dto.JoinRequest;
+import com.flab.comen.member.dto.request.JoinRequest;
 import com.flab.comen.member.exception.DuplicatedEmailException;
 import com.flab.comen.member.exception.NotExistedMemberException;
 import com.flab.comen.member.mapper.MemberMapper;

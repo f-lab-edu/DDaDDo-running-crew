@@ -22,8 +22,6 @@ include::{snippets}/member-join/response-fields.adoc[]
 **http_request**
 include::{snippets}/member-join/request-body.adoc[]
 
-NOTE: tid 필드는 회원가입 후 등록된 tid를 반환받기 위한 필드로 회원 가입 요청 시에는 포함하지 않습니다.
-
 **http_response**
 include::{snippets}/member-join/http-response.adoc[]
 

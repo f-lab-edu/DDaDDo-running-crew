@@ -93,8 +93,7 @@ class MemberControllerTest {
 						fieldWithPath("password").type(JsonFieldType.STRING)
 								.description("비밀번호(8자~16자 이하의 영문 대소문자/숫자/특수문자 조합)"),
 						fieldWithPath("name").type(JsonFieldType.STRING).description("이름"),
-						fieldWithPath("role").type(JsonFieldType.STRING).description("에프랩 내에서의 역할(COACH|MENTEE)"),
-						fieldWithPath("tid").ignored()
+						fieldWithPath("role").type(JsonFieldType.STRING).description("에프랩 내에서의 역할(COACH|MENTEE)")
 					),
 					responseFields(
 						fieldWithPath("email").type(JsonFieldType.STRING).description("가입된 이메일 정보"),

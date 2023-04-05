@@ -34,7 +34,7 @@ public class MemberService {
 
 		memberMapper.join(joinRequest);
 
-		Member savedMember = getByTid(joinRequest.getTid());
+		Member savedMember = getByEmail(joinRequest.getEmail());
 
 		return JoinResponse.builder()
 			.email(savedMember.getEmail())
@@ -43,8 +43,8 @@ public class MemberService {
 			.activeType(savedMember.getActiveType()).build();
 	}
 
-	public Member getByTid(Long tid) {
-		return memberMapper.findByTid(tid).orElseThrow(() -> {
+	public Member getByEmail(String email) {
+		return memberMapper.findByEmail(email).orElseThrow(() -> {
 			throw new MemberNotFoundException(MEMBER_NOT_FOUND.getMessage());
 		});
 	}

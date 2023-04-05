@@ -51,7 +51,6 @@ public class SecurityConfig {
 					.requestMatchers("/api/v1/members/join", "/api/v1/members/login").permitAll()
 					.requestMatchers("/api/v1/mentees/**").hasAuthority(String.valueOf(Role.MENTEE))
 					.requestMatchers("/api/v1/coaches/**").hasAuthority(String.valueOf(Role.COACH))
-					.requestMatchers("/api/v1/members/test").hasAuthority(String.valueOf(Role.COACH))
 					.anyRequest().authenticated())
 			.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 		return http.build();

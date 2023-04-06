@@ -2,6 +2,7 @@ package com.flab.comen.global.jwt;
 
 import java.util.Base64;
 import java.util.Date;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,14 +25,17 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class JwtTokenProvider {
 
-	private static final String AUTHORIZATION_HEADER = "Authorization";
 	private String secretKey;
 	private long tokenValidityInMilliseconds;
 	private final PrincipalDetailsService principalDetailsService;
 
+	private static final String AUTHORIZATION_HEADER = "Authorization";
+	private static final String AUTHORIZATION_TYPE = "Bearer";
+	private static final String ROLE = "role";
+
 	public JwtTokenProvider(@Value("${jwt.secret}") String secretKey,
-							@Value("${jwt.token-validity-in-seconds}") long tokenValidityInMilliseconds,
-							PrincipalDetailsService principalDetailsService) {
+		@Value("${jwt.token-validity-in-seconds}") long tokenValidityInMilliseconds,
+		PrincipalDetailsService principalDetailsService) {
 		this.secretKey = secretKey;
 		this.tokenValidityInMilliseconds = tokenValidityInMilliseconds;
 		this.principalDetailsService = principalDetailsService;
@@ -44,7 +48,7 @@ public class JwtTokenProvider {
 
 	public String generateAccessToken(String email, Role role) {
 		Claims claims = Jwts.claims().setSubject(email);
-		claims.put("role", role);
+		claims.put(ROLE, role);
 
 		Date now = new Date();
 		Date validity = new Date(now.getTime() + this.tokenValidityInMilliseconds);
@@ -69,20 +73,19 @@ public class JwtTokenProvider {
 			.getBody().getSubject();
 	}
 
-	public String resolveToken(HttpServletRequest request) {
-		String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-			return bearerToken.substring(7);
-		}
-		return null;
+	public Optional<String> resolveToken(HttpServletRequest request) {
+		return Optional.ofNullable(request.getHeader(AUTHORIZATION_HEADER))
+			.filter(StringUtils::hasText)
+			.filter(header -> header.startsWith(AUTHORIZATION_TYPE))
+			.map(header -> header.substring(7));
 	}
 
 	public boolean validateToken(String token) {
 		try {
 			Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
 			return true;
-		} catch (RuntimeException e) {
-			log.error("{} - token : {} ", e.getMessage(), token);
+		} catch (RuntimeException exception) {
+			log.error("Invalid token : {} ", token, exception);
 		}
 		return false;
 	}

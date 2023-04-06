@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.flab.comen.member.domain.Member;
-import com.flab.comen.member.dto.JoinRequest;
+import com.flab.comen.member.dto.request.JoinRequest;
 
 @Mapper
 public interface MemberMapper {

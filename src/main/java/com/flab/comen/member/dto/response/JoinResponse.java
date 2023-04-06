@@ -1,4 +1,4 @@
-package com.flab.comen.member.dto;
+package com.flab.comen.member.dto.response;
 
 import com.flab.comen.member.domain.ActiveType;
 import com.flab.comen.member.domain.Role;
@@ -7,7 +7,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

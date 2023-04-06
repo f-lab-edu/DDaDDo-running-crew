@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -37,8 +36,9 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flab.comen.member.domain.ActiveType;
 import com.flab.comen.member.domain.Role;
-import com.flab.comen.member.dto.JoinRequest;
-import com.flab.comen.member.dto.JoinResponse;
+import com.flab.comen.member.dto.request.JoinRequest;
+import com.flab.comen.member.dto.response.JoinResponse;
+import com.flab.comen.member.service.AuthenticationService;
 import com.flab.comen.member.service.MemberService;
 
 @WebMvcTest(MemberController.class)
@@ -52,6 +52,9 @@ class MemberControllerTest {
 
 	@MockBean
 	private MemberService memberService;
+
+	@MockBean
+	private AuthenticationService authenticationService;
 
 	@Autowired
 	private ObjectMapper objectMapper;
@@ -91,7 +94,7 @@ class MemberControllerTest {
 					requestFields(
 						fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
 						fieldWithPath("password").type(JsonFieldType.STRING)
-								.description("비밀번호(8자~16자 이하의 영문 대소문자/숫자/특수문자 조합)"),
+							.description("비밀번호(8자~16자 이하의 영문 대소문자/숫자/특수문자 조합)"),
 						fieldWithPath("name").type(JsonFieldType.STRING).description("이름"),
 						fieldWithPath("role").type(JsonFieldType.STRING).description("에프랩 내에서의 역할(COACH|MENTEE)")
 					),

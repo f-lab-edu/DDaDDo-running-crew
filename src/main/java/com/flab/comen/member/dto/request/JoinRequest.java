@@ -1,4 +1,4 @@
-package com.flab.comen.member.dto;
+package com.flab.comen.member.dto.request;
 
 import com.flab.comen.member.domain.Role;
 

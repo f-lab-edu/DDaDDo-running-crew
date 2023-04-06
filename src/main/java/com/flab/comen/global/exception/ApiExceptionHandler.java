@@ -24,7 +24,7 @@ public class ApiExceptionHandler {
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException exception) {
-		log.error("MethodArgumentNotValidException - {}", exception.getMessage());
+		log.error("MethodArgumentNotValidException : ", exception);
 
 		Map<String, String> errors = new HashMap<>();
 		exception.getBindingResult().getAllErrors()
@@ -34,26 +34,27 @@ public class ApiExceptionHandler {
 	}
 
 	@ExceptionHandler(DuplicatedEmailException.class)
-	private ResponseEntity<ErrorResponse> handleDuplicatedEmailException() {
-		log.error("DuplicatedEmailException has occurred.");
+	private ResponseEntity<ErrorResponse> handleDuplicatedEmailException(DuplicatedEmailException exception) {
+		log.error("DuplicatedEmailException : ", exception);
 		return ErrorResponse.toResponseEntity(DUPLICATED_EMAIL);
 	}
 
 	@ExceptionHandler(NotExistedMemberException.class)
-	private ResponseEntity<ErrorResponse> handleNotExistedMemberException() {
-		log.error("NotExistedMemberException  has occurred.");
+	private ResponseEntity<ErrorResponse> handleNotExistedMemberException(NotExistedMemberException exception) {
+		log.error("NotExistedMemberException : ", exception);
 		return ErrorResponse.toResponseEntity(NOT_EXISTED_MEMBER);
 	}
 
 	@ExceptionHandler(NotMatchedInformationException.class)
-	private ResponseEntity<ErrorResponse> handleNotMatchedInformationException() {
-		log.error("NotMatchedInformationException has occurred.");
+	private ResponseEntity<ErrorResponse> handleNotMatchedInformationException(
+		NotMatchedInformationException exception) {
+		log.error("NotMatchedInformationException : ", exception);
 		return ErrorResponse.toResponseEntity(NOT_MATCHED_LOGIN_INFORMATION);
 	}
 
 	@ExceptionHandler(NotActivatedMemberException.class)
-	private ResponseEntity<ErrorResponse> handleNotActivatedMemberException() {
-		log.error("NotActivatedMemberException has occurred.");
+	private ResponseEntity<ErrorResponse> handleNotActivatedMemberException(NotActivatedMemberException exception) {
+		log.error("NotActivatedMemberException : ", exception);
 		return ErrorResponse.toResponseEntity(NOT_ACTIVATED_MEMBER);
 	}
 }

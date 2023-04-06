@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.flab.comen.global.exception.ErrorMessage;
 import com.flab.comen.member.domain.Member;
 import com.flab.comen.member.exception.NotExistedMemberException;
 import com.flab.comen.member.mapper.MemberMapper;
@@ -21,7 +22,7 @@ public class PrincipalDetailsService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		Member member = memberMapper.findByEmail(email).orElseThrow(() ->
-			new NotExistedMemberException());
+			new NotExistedMemberException(ErrorMessage.NOT_EXISTED_MEMBER));
 
 		return new PrincipalDetails(member);
 	}

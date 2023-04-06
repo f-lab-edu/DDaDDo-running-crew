@@ -3,6 +3,7 @@ package com.flab.comen.member.service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.flab.comen.global.exception.ErrorMessage;
 import com.flab.comen.member.domain.Member;
 import com.flab.comen.member.dto.request.JoinRequest;
 import com.flab.comen.member.dto.response.JoinResponse;
@@ -25,7 +26,7 @@ public class MemberService {
 	public JoinResponse join(JoinRequest joinRequest) {
 
 		memberMapper.findByEmail(joinRequest.getEmail()).ifPresent(it -> {
-			throw new DuplicatedEmailException();
+			throw new DuplicatedEmailException(ErrorMessage.DUPLICATED_EMAIL);
 		});
 
 		String encryptPassword = passwordEncoder.encode(joinRequest.getPassword());
@@ -44,7 +45,7 @@ public class MemberService {
 
 	public Member getByEmail(String email) {
 		return memberMapper.findByEmail(email).orElseThrow(() -> {
-			throw new NotExistedMemberException();
+			throw new NotExistedMemberException(ErrorMessage.NOT_EXISTED_MEMBER);
 		});
 	}
 }

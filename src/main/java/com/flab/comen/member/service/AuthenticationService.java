@@ -3,6 +3,7 @@ package com.flab.comen.member.service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.flab.comen.global.exception.ErrorMessage;
 import com.flab.comen.global.jwt.JwtTokenProvider;
 import com.flab.comen.member.domain.ActiveType;
 import com.flab.comen.member.domain.Member;
@@ -28,14 +29,14 @@ public class AuthenticationService {
 
 	public TokenResponse login(LoginRequest loginRequest) {
 		Member member = memberMapper.findByEmail(loginRequest.getEmail()).orElseThrow(() ->
-			new NotMatchedInformationException());
+			new NotMatchedInformationException(ErrorMessage.NOT_MATCHED_LOGIN_INFORMATION));
 
 		if (!isMatchedPassword(loginRequest.getPassword(), member.getPassword())) {
-			throw new NotMatchedInformationException();
+			throw new NotMatchedInformationException(ErrorMessage.NOT_MATCHED_LOGIN_INFORMATION);
 		}
 
 		if (!ActiveType.ACTIVE.equals(member.getActiveType())) {
-			throw new NotActivatedMemberException();
+			throw new NotActivatedMemberException(ErrorMessage.NOT_ACTIVATED_MEMBER);
 		}
 
 		return new TokenResponse(jwtTokenProvider.generateAccessToken(member.getEmail(), member.getRole()));

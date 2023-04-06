@@ -32,8 +32,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
 		objectMapper.writerWithDefaultPrettyPrinter().writeValue(response.getOutputStream(),
 			ErrorResponse.builder()
-				.status(ErrorMessage.UNAUTHORIZED_TOKEN.getStatus())
-				.error(ErrorMessage.UNAUTHORIZED_TOKEN.getError())
+				.status(ErrorMessage.UNAUTHORIZED_TOKEN.getStatus().toString())
 				.message(ErrorMessage.UNAUTHORIZED_TOKEN.getMessage())
 				.build());
 	}

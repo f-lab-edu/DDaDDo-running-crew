@@ -32,8 +32,7 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
 
 		objectMapper.writerWithDefaultPrettyPrinter().writeValue(response.getOutputStream(),
 			ErrorResponse.builder()
-				.status(ErrorMessage.FORBIDDEN_TOKEN.getStatus())
-				.error(ErrorMessage.FORBIDDEN_TOKEN.getError())
+				.status(ErrorMessage.FORBIDDEN_TOKEN.getStatus().toString())
 				.message(ErrorMessage.FORBIDDEN_TOKEN.getMessage())
 				.build());
 	}

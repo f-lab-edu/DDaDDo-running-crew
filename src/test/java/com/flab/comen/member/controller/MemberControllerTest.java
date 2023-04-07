@@ -9,52 +9,33 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.mybatis.spring.boot.test.autoconfigure.AutoConfigureMybatis;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.RestDocumentationContextProvider;
-import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flab.comen.member.domain.ActiveType;
 import com.flab.comen.member.domain.Role;
 import com.flab.comen.member.dto.request.JoinRequest;
 import com.flab.comen.member.dto.response.JoinResponse;
-import com.flab.comen.member.service.AuthenticationService;
 import com.flab.comen.member.service.MemberService;
+import com.flab.comen.member.util.ControllerTest;
 
 @WebMvcTest(MemberController.class)
-@AutoConfigureMockMvc(addFilters = false)
-@AutoConfigureMybatis
-@ExtendWith({MockitoExtension.class, RestDocumentationExtension.class})
-class MemberControllerTest {
-
-	@Autowired
-	private MockMvc mockMvc;
+class MemberControllerTest extends ControllerTest {
 
 	@MockBean
 	private MemberService memberService;
-
-	@MockBean
-	private AuthenticationService authenticationService;
 
 	@Autowired
 	private ObjectMapper objectMapper;
@@ -63,13 +44,6 @@ class MemberControllerTest {
 	public static final String PASSWORD = "1234!Comen";
 	public static final String NAME = "김코멘";
 	public static final Role ROLE = MENTEE;
-
-	@BeforeEach
-	public void setUp(WebApplicationContext webApplicationContext,
-		RestDocumentationContextProvider restDocumentation) {
-		this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-			.apply(documentationConfiguration(restDocumentation)).build();
-	}
 
 	@Nested
 	@DisplayName("회원가입")

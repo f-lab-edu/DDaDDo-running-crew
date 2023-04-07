@@ -14,15 +14,55 @@ endif::[]
 === 1. 회원가입
 
 **request_fields**
+
 include::{snippets}/member-join/request-fields.adoc[]
 
 **response_fields**
+
 include::{snippets}/member-join/response-fields.adoc[]
 
 **http_request**
+
 include::{snippets}/member-join/request-body.adoc[]
 
 **http_response**
+
 include::{snippets}/member-join/http-response.adoc[]
 
 ---
+
+=== 2. 로그인
+
+**request_fields**
+
+include::{snippets}/auth-login/request-fields.adoc[]
+
+**response_fields**
+
+include::{snippets}/auth-login/response-fields.adoc[]
+
+**http_request**
+
+include::{snippets}/auth-login/request-body.adoc[]
+
+**http_response**
+
+include::{snippets}/auth-login/http-response.adoc[]
+
+==== 액세스 토큰 재발급
+
+**request_fields**
+
+include::{snippets}/auth-reissue/request-fields.adoc[]
+
+**response_fields**
+
+include::{snippets}/auth-reissue/response-fields.adoc[]
+
+**http_request**
+
+include::{snippets}/auth-reissue/request-body.adoc[]
+
+**http_response**
+
+include::{snippets}/auth-reissue/http-response.adoc[]

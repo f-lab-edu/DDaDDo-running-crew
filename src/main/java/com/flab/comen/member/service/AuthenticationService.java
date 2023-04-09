@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import com.flab.comen.global.exception.ErrorMessage;
 import com.flab.comen.global.jwt.JwtTokenProvider;
 import com.flab.comen.global.jwt.repository.TokenCache;
-import com.flab.comen.member.domain.ActiveType;
 import com.flab.comen.member.domain.Member;
 import com.flab.comen.member.domain.Role;
 import com.flab.comen.member.dto.request.LoginRequest;
@@ -24,13 +23,15 @@ public class AuthenticationService {
 	private final PasswordEncoder passwordEncoder;
 	private final JwtTokenProvider jwtTokenProvider;
 	private final TokenCache tokenCache;
+	private final MemberService memberService;
 
 	public AuthenticationService(MemberMapper memberMapper, PasswordEncoder passwordEncoder,
-		JwtTokenProvider jwtTokenProvider, TokenCache tokenCache) {
+		JwtTokenProvider jwtTokenProvider, TokenCache tokenCache, MemberService memberService) {
 		this.memberMapper = memberMapper;
 		this.passwordEncoder = passwordEncoder;
 		this.jwtTokenProvider = jwtTokenProvider;
 		this.tokenCache = tokenCache;
+		this.memberService = memberService;
 	}
 
 	public TokenResponse login(LoginRequest loginRequest) {
@@ -38,7 +39,7 @@ public class AuthenticationService {
 			.filter(m -> isMatchedPassword(loginRequest.password(), m.getPassword()))
 			.orElseThrow(() -> new NotMatchedInformationException(ErrorMessage.NOT_MATCHED_LOGIN_INFORMATION));
 
-		if (!isActiveMember(member)) {
+		if (!memberService.isActiveMember(member)) {
 			throw new NotActivatedMemberException(ErrorMessage.NOT_ACTIVATED_MEMBER);
 		}
 
@@ -52,10 +53,6 @@ public class AuthenticationService {
 
 	public boolean isMatchedPassword(String password, String existedPassword) {
 		return passwordEncoder.matches(password, existedPassword);
-	}
-
-	public boolean isActiveMember(Member member) {
-		return ActiveType.ACTIVE.equals(member.getActiveType());
 	}
 
 	public TokenResponse reissueToken(ReIssueRequest request) {

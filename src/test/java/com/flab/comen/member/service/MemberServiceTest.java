@@ -7,15 +7,20 @@ import static org.mockito.BDDMockito.*;
 
 import java.util.Optional;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.flab.comen.member.domain.ActiveType;
 import com.flab.comen.member.domain.Member;
+import com.flab.comen.member.domain.Role;
 import com.flab.comen.member.dto.request.JoinRequest;
 import com.flab.comen.member.exception.DuplicatedEmailException;
 import com.flab.comen.member.exception.NotExistedMemberException;
@@ -57,5 +62,17 @@ class MemberServiceTest {
 				memberService.getByEmail(email);
 			});
 		}
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"INACTIVE", "DELETE"})
+	@DisplayName("회원이 활성화 상태가 아니면 false를 반환한다.")
+	void when_memberINotActive_expects_returnFalse(String activeType) {
+		Member member = Member.of("comen@comen.com", "1234Q!wert", "김코멘", Role.MENTEE,
+			ActiveType.valueOf(activeType));
+
+		Assertions.assertFalse(
+			memberService.isActiveMember(member)
+		);
 	}
 }

@@ -4,17 +4,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.flab.comen.global.jwt.JwtTokenProvider;
 import com.flab.comen.global.jwt.repository.TokenCache;
-import com.flab.comen.member.domain.ActiveType;
-import com.flab.comen.member.domain.Member;
-import com.flab.comen.member.domain.Role;
 import com.flab.comen.member.exception.NotExistedTokenException;
 import com.flab.comen.member.mapper.MemberMapper;
 
@@ -59,18 +54,6 @@ public class AuthenticationServiceTest {
 
 			Assertions.assertFalse(
 				authenticationService.isMatchedPassword(otherPassword, encodedPassword)
-			);
-		}
-
-		@ParameterizedTest
-		@ValueSource(strings = {"INACTIVE", "DELETE"})
-		@DisplayName("회원이 활성화 상태가 아니면 로그인이 실패한다.")
-		void when_memberINotActive_expects_loginToFail(String activeType) {
-			Member member = Member.of("comen@comen.com", "1234Q!wert", "김코멘", Role.MENTEE,
-				ActiveType.valueOf(activeType));
-
-			Assertions.assertFalse(
-				authenticationService.isActiveMember(member)
 			);
 		}
 	}

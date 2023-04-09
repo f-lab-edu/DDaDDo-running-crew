@@ -3,6 +3,7 @@ package com.flab.comen.global.jwt;
 import java.util.Base64;
 import java.util.Date;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -61,6 +62,10 @@ public class JwtTokenProvider {
 			.compact();
 	}
 
+	public String generateRefreshToken() {
+		return UUID.randomUUID().toString();
+	}
+
 	public Authentication getAuthentication(String token) {
 		UserDetails userDetails = principalDetailsService.loadUserByUsername(getMemberEmail(token));
 		return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
@@ -71,6 +76,13 @@ public class JwtTokenProvider {
 			.setSigningKey(secretKey)
 			.parseClaimsJws(token)
 			.getBody().getSubject();
+	}
+
+	public String getRole(String token) {
+		return (String)Jwts.parser()
+			.setSigningKey(secretKey)
+			.parseClaimsJws(token)
+			.getBody().get(ROLE);
 	}
 
 	public Optional<String> resolveToken(HttpServletRequest request) {

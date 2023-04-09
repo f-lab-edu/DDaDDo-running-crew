@@ -4,6 +4,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.flab.comen.global.exception.ErrorMessage;
+import com.flab.comen.member.domain.ActiveType;
 import com.flab.comen.member.domain.Member;
 import com.flab.comen.member.dto.request.JoinRequest;
 import com.flab.comen.member.dto.response.JoinResponse;
@@ -47,5 +48,9 @@ public class MemberService {
 		return memberMapper.findByEmail(email).orElseThrow(() -> {
 			throw new NotExistedMemberException(ErrorMessage.NOT_EXISTED_MEMBER);
 		});
+	}
+
+	public boolean isActiveMember(Member member) {
+		return ActiveType.ACTIVE.equals(member.getActiveType());
 	}
 }

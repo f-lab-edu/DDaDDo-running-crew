@@ -48,7 +48,7 @@ public class SecurityConfig {
 			.and()
 			.authorizeHttpRequests(authorize ->
 				authorize
-					.requestMatchers("/api/v1/members/join", "/api/v1/members/login").permitAll()
+					.requestMatchers("/api/v1/members/join", "/api/v1/auth/**").permitAll()
 					.requestMatchers("/api/v1/mentees/**").hasAuthority(String.valueOf(Role.MENTEE))
 					.requestMatchers("/api/v1/coaches/**").hasAuthority(String.valueOf(Role.COACH))
 					.anyRequest().authenticated())

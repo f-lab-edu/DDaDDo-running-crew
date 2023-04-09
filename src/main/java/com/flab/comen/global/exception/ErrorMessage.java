@@ -13,6 +13,7 @@ public enum ErrorMessage {
 	NOT_MATCHED_LOGIN_INFORMATION(HttpStatus.CONFLICT, "아이디나 패스워드가 일치하지 않습니다."),
 
 	// jwt
+	NOT_EXISTED_TOKEN(HttpStatus.NOT_FOUND, "등록된 토큰 정보가 없습니다."),
 	UNAUTHORIZED_TOKEN(HttpStatus.UNAUTHORIZED, "인증이 필요한 토큰입니다."),
 	FORBIDDEN_TOKEN(HttpStatus.FORBIDDEN, "권한이 필요한 토큰입니다.");
 

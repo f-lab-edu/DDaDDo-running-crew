@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import com.flab.comen.member.exception.DuplicatedEmailException;
 import com.flab.comen.member.exception.NotActivatedMemberException;
 import com.flab.comen.member.exception.NotExistedMemberException;
+import com.flab.comen.member.exception.NotExistedTokenException;
 import com.flab.comen.member.exception.NotMatchedInformationException;
 
 import lombok.extern.slf4j.Slf4j;
@@ -56,5 +57,11 @@ public class ApiExceptionHandler {
 	private ResponseEntity<ErrorResponse> handleNotActivatedMemberException(NotActivatedMemberException exception) {
 		log.error("NotActivatedMemberException : ", exception);
 		return ErrorResponse.toResponseEntity(NOT_ACTIVATED_MEMBER);
+	}
+
+	@ExceptionHandler(NotExistedTokenException.class)
+	private ResponseEntity<ErrorResponse> handleInvalidTokenException(NotExistedTokenException exception) {
+		log.error("InvalidTokenException : ", exception);
+		return ErrorResponse.toResponseEntity(NOT_EXISTED_TOKEN);
 	}
 }

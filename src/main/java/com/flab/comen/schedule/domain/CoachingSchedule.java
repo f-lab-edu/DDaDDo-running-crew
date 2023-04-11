@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import com.flab.comen.global.domain.BaseTime;
 
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,30 +21,17 @@ public class CoachingSchedule extends BaseTime {
 	private LocalDateTime possibleDt;
 	private Long updatedBy;
 
-	@Builder
-	private CoachingSchedule(Long coachId, Long menteeId, int weekNumber, boolean cancelYn,
-		String feedback, LocalDateTime feedbackCreatedDt, LocalDateTime possibleDt, Long updatedBy) {
-		this.coachId = coachId;
-		this.menteeId = menteeId;
-		this.weekNumber = weekNumber;
-		this.cancelYn = cancelYn;
-		this.feedback = feedback;
-		this.feedbackCreatedDt = feedbackCreatedDt;
-		this.possibleDt = possibleDt;
-		this.updatedBy = updatedBy;
-	}
-
 	public static CoachingSchedule of(Long coachId, Long menteeId, int weekNumber, boolean cancelYn,
 		String feedback, LocalDateTime feedbackCreatedDt, LocalDateTime possibleDt, Long updatedBy) {
-		return CoachingSchedule.builder()
-			.coachId(coachId)
-			.menteeId(menteeId)
-			.weekNumber(weekNumber)
-			.cancelYn(cancelYn)
-			.feedback(feedback)
-			.feedbackCreatedDt(feedbackCreatedDt)
-			.possibleDt(possibleDt)
-			.updatedBy(updatedBy)
-			.build();
+		CoachingSchedule coachingSchedule = new CoachingSchedule();
+		coachingSchedule.coachId = coachId;
+		coachingSchedule.menteeId = menteeId;
+		coachingSchedule.weekNumber = weekNumber;
+		coachingSchedule.cancelYn = cancelYn;
+		coachingSchedule.feedback = feedback;
+		coachingSchedule.feedbackCreatedDt = feedbackCreatedDt;
+		coachingSchedule.possibleDt = possibleDt;
+		coachingSchedule.updatedBy = updatedBy;
+		return coachingSchedule;
 	}
 }

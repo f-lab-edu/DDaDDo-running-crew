@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.flab.comen.member.domain.Member;
 import com.flab.comen.relationship.domain.CoachingRelationship;
 import com.flab.comen.relationship.dto.RelationshipResponse;
 import com.flab.comen.relationship.mapper.CoachingRelationshipMapper;
@@ -25,19 +24,15 @@ public class MenteeService {
 		this.coachingRelationshipMapper = coachingRelationshipMapper;
 	}
 
-	public Optional<ScheduleResponse> getSchedule(Member member, LocalDate date) {
-		if (date == null) {
-			date = LocalDate.now();
-		}
-
-		CoachingSchedule schedule = coachingScheduleMapper.findByMenteeIdAndPossibleDt(member.getTid(), date);
+	public Optional<ScheduleResponse> getSchedule(Long memberId, LocalDate date) {
+		CoachingSchedule schedule = coachingScheduleMapper.findByMenteeIdAndPossibleDt(memberId, date);
 
 		return Optional.ofNullable(schedule)
 			.map(ScheduleResponse::from);
 	}
 
-	public Optional<RelationshipResponse> getRelationship(Member member) {
-		CoachingRelationship relationship = coachingRelationshipMapper.findByMenteeIdAndActiveYn(member.getTid());
+	public Optional<RelationshipResponse> getRelationship(Long memberId, boolean activeYn) {
+		CoachingRelationship relationship = coachingRelationshipMapper.findByMenteeIdAndActiveYn(memberId, activeYn);
 
 		return Optional.ofNullable(relationship)
 			.map(RelationshipResponse::from);

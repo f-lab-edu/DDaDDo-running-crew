@@ -6,12 +6,16 @@
 <mapper namespace="com.flab.comen.relationship.mapper.CoachingRelationshipMapper">
 
 
-    <select id="findByMenteeIdAndActiveYn" parameterType="Long"
-            resultType="com.flab.comen.relationship.domain.CoachingRelationship">
-        SELECT *
+    <select id="findByMenteeIdAndActiveYn" parameterType="map" resultType="CoachingRelationship">
+        SELECT tid,
+               coach_id,
+               mentee_id,
+               active_yn,
+               started_dt,
+               expired_dt
         FROM coaching_relationship
         WHERE mentee_id = #{menteeId}
-          AND active_yn = 'Y'
+          AND active_yn = #{activeYn}
     </select>
 
 </mapper>

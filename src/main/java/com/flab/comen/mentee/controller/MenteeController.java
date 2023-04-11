@@ -24,14 +24,15 @@ public class MenteeController {
 		this.menteeService = menteeService;
 	}
 
-	@GetMapping(value = {"", "{date}"})
+	@GetMapping(value = "/schedule/{date}")
 	public ResponseEntity<Optional<ScheduleResponse>> getSchedule(@AuthMember Member member,
-		@PathVariable(required = false) LocalDate date) {
-		return ResponseEntity.ok(menteeService.getSchedule(member, date));
+		@PathVariable LocalDate date) {
+		return ResponseEntity.ok(menteeService.getSchedule(member.getTid(), date));
 	}
 
-	@GetMapping("/relationship")
-	public ResponseEntity<Optional<RelationshipResponse>> getRelationship(@AuthMember Member member) {
-		return ResponseEntity.ok(menteeService.getRelationship(member));
+	@GetMapping("/relationship/{activeYn}")
+	public ResponseEntity<Optional<RelationshipResponse>> getRelationship(@AuthMember Member member,
+		@PathVariable boolean activeYn) {
+		return ResponseEntity.ok(menteeService.getRelationship(member.getTid(), activeYn));
 	}
 }

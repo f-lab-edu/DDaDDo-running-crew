@@ -65,7 +65,7 @@
             ) coach ON coach.coach_id = cr.coach_id
             SET cr.expired_dt = DATE_ADD(expired_dt, INTERVAL 7 DAY)
         WHERE cr.expired_dt > NOW()
-          AND cr.active_yn = 'Y'
+          AND cr.active_yn = 0
           AND coach.coach_id IS NULL
           AND cr.tid > 0;
     </update>

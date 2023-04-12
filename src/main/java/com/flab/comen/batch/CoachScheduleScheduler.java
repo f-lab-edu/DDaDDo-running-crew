@@ -17,7 +17,8 @@ public class CoachScheduleScheduler {
         this.coachScheduleService = coachScheduleService;
     }
 
-    @Scheduled(cron = "0 30 21 * * FRI")
+//    @Scheduled(cron = "0 30 21 * * FRI")
+    @Scheduled(fixedRate = 5000)
     public void checkCoachScheduleNextWeek() {
         String nextMondayDate = getNextMondayDate();
         int result = coachScheduleService.updateMenteesCoachExpireDate(nextMondayDate);

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flab.comen.schedule.mapper.CoachingScheduleMapper">
+
+
+    <select id="findByMenteeIdAndPossibleDt" parameterType="map" resultType="CoachingSchedule">
+        SELECT tid,
+               coach_id,
+               mentee_id,
+               week_number,
+               cancel_yn,
+               feedback,
+               feedback_created_dt,
+               possible_dt,
+               created_dt,
+               updated_dt,
+               updated_by
+        FROM coaching_schedule
+        WHERE mentee_id = #{menteeId}
+          AND possible_dt LIKE #{date} '%'
+    </select>
+
+</mapper>

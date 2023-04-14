@@ -11,7 +11,7 @@ import com.flab.comen.member.domain.Member;
 
 public class PrincipalDetails implements UserDetails {
 
-	private Member member;
+	public Member member;
 
 	public PrincipalDetails(Member member) {
 		this.member = member;
